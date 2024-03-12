@@ -21,29 +21,42 @@ export type Data = {
 };
 
 async function fetchEnsData(address: string): Promise<{ ensName: string | null; avatarUrl: string | null }> {
-  try {
-    const response = await fetch(`https://ensdata.net/${address}`);
-    if (response.ok) {
-      const data = await response.json();
-      const ensName = data.ens || null;
-      const avatarUrl = data.avatar_url || null;
+  // Define the number of retries and a delay function
+  const maxRetries = 3;
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-      // Check if the avatar_url returns an image
-      if (avatarUrl) {
-        const avatarResponse = await fetch(avatarUrl);
-        if (!avatarResponse.ok || !avatarResponse.headers.get("content-type")?.startsWith("image/")) {
-          return { ensName, avatarUrl: null };
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(`https://ensdata.net/${address}`);
+      if (response.ok) {
+        const data = await response.json();
+        const ensName = data.ens || null;
+        const avatarUrl = data.avatar_url || null;
+        
+        if (avatarUrl) {
+          // Ensure the avatar URL points to an image
+          const avatarResponse = await fetch(avatarUrl);
+          if (avatarResponse.ok && avatarResponse.headers.get("content-type")?.startsWith("image/")) {
+            return { ensName, avatarUrl };
+          }
         }
+        
+        return { ensName, avatarUrl: null };
       }
-
-      return { ensName, avatarUrl };
+      // If the response was not OK, wait before retrying
+      await delay(1000 * attempt); 
+    } catch (error) {
+      console.error(`Attempt ${attempt} - Error fetching ENS data for ${address}:`, error);
+      if (attempt < maxRetries) {
+        // Wait before retrying
+        await delay(1000 * attempt);
+      }
     }
-  } catch (error) {
-    console.error(`Error fetching ENS data for ${address}:`, error);
   }
 
   return { ensName: null, avatarUrl: null };
 }
+
 
 async function fetchMetadata(contractAddress: string): Promise<Metadata | null> {
   const apiKey = process.env.RESERVOIR_API_KEY;

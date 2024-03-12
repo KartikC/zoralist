@@ -16,6 +16,20 @@ interface Metadata {
   image: string;
 }
 
+function useLoadingDots(interval: number = 300, dotCount: number = 3) {
+    const [dots, setDots] = useState('.');
+  
+    useEffect(() => {
+      const timer = setInterval(() => {
+        setDots((prevDots) => (prevDots.length >= dotCount ? '.' : prevDots + '.'));
+      }, interval);
+  
+      return () => clearInterval(timer);
+    }, [interval, dotCount]);
+  
+    return dots;
+  }
+
 const ListPage = () => {
   const [owners, setOwners] = useState<Owner[]>([]);
   const [metadata, setMetadata] = useState<Metadata | null>(null);
@@ -52,8 +66,10 @@ const ListPage = () => {
   const metadataUrl = metadata ? `https://zora.co/collect/zora:${contract}/${token}` : '#';
 
 
+  const loadingDots = useLoadingDots();
+
   if (loading) {
-    return <div className={styles.loading}>Loading...</div>; // Simple loading text, can be replaced with a spinner
+    return <div className={styles.loading}>{loadingDots}</div>;
   }
 
   return (
