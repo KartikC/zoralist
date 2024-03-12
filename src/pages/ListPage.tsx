@@ -10,8 +10,16 @@ interface Owner {
   avatarUrl: string | null;
 }
 
+interface Metadata {
+    name: string;
+    description: string;
+    image: string;
+  }
+
 const ListPage = () => {
   const [owners, setOwners] = useState<Owner[]>([]);
+  const [metadata, setMetadata] = useState<Metadata | null>(null);
+
 
   // Fetch data from your API on component mount
   useEffect(() => {
@@ -19,6 +27,7 @@ const ListPage = () => {
       .then(response => response.json())
       .then(data => {
         setOwners(data.owners);
+        setMetadata(data.metadata); // Assuming the API returns metadata as well
       });
   }, []);
 
@@ -33,21 +42,34 @@ const ListPage = () => {
   };
 
   return (
-    <div className={styles.ownerListContainer}>
-      {owners.map((owner, index) => (
-        <div key={index} className={styles.ownerItem}>
-          <div className={styles.ownerAvatarContainer}>
-            {getAvatar(owner)}
-          </div>
-          <div className={styles.ownerInfo}>
-            <div className={styles.ownerName}>{owner.ensName || truncateAddress(owner.address)}</div>
-            <div className={styles.ownerTokens}>{owner.tokenCount} tokens</div>
-          </div>
+    <>
+      {metadata && (
+        <div className={styles.collectionMetadata}>
+          <img src={metadata.image} alt={metadata.name} className={styles.metadataImage} />
+          <h1 className={styles.metadataName}>{metadata.name}</h1>
+          <p className={styles.metadataDescription}>{metadata.description}</p>
         </div>
-      ))}
-    </div>
+      )}
+      <h2 className={styles.topOwnersHeader}>Top 100 Owners</h2>
+      <div className={styles.ownerListContainer}>
+        {owners.map((owner, index) => (
+           <div key={index} className={styles.ownerItem}>
+           <div className={styles.ownerAvatarContainer}>
+             {getAvatar(owner)}
+           </div>
+           <div className={styles.ownerInfo}>
+             <div className={styles.ownerName}>{owner.ensName || truncateAddress(owner.address)}</div>
+             <div className={styles.ownerTokens}>{owner.tokenCount} tokens</div>
+           </div>
+         </div>
+        ))}
+      </div>
+    </>
   );
 };
+
+
+
 
 function truncateAddress(address: string): string {
   return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;

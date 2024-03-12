@@ -9,6 +9,12 @@ export type Owner = {
   avatarUrl: string | null;
 };
 
+export type Metadata = {
+  name: string;
+  description: string;
+  image: string;
+};
+
 export type Data = {
   owners: Owner[];
 };
@@ -38,6 +44,35 @@ async function fetchEnsData(address: string): Promise<{ ensName: string | null; 
   return { ensName: null, avatarUrl: null };
 }
 
+async function fetchMetadata(contractAddress: string): Promise<Metadata | null> {
+  const apiKey = process.env.RESERVOIR_API_KEY;
+  try {
+    const metadataResponse = await fetch(
+      `https://api-zora.reservoir.tools/tokens/v7?collection=${contractAddress}`,
+      {
+        headers: {
+          'accept': 'application/json',
+          'x-api-key': apiKey,
+        },
+      }
+    );
+
+    if (!metadataResponse.ok) throw new Error('Failed to fetch metadata');
+
+    const metadataJson = await metadataResponse.json();
+    const firstToken = metadataJson.tokens[0].token;
+
+    return {
+      name: firstToken.name,
+      description: firstToken.description,
+      image: firstToken.image,
+    };
+  } catch (error) {
+    console.error(`Error fetching metadata for ${contractAddress}:`, error);
+    return null;
+  }
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -45,17 +80,15 @@ export default async function handler(
   if (req.method === "GET") {
     const { contract, token, limit } = req.query;
 
-    if (!contract || !token) {
+    if (!contract) {
       res.status(400).json({ owners: [] });
       return;
     }
 
-    http://localhost:3000/api/list?contract=0x72d07beebb80f084329da88063f5e52f70f020a3&token=1&limit=100
-
     try {
       const apiKey = process.env.RESERVOIR_API_KEY;
-      const response = await fetch(
-        `https://api-zora.reservoir.tools/owners/v2?token=${contract}:${token}&limit=${limit || 100}`,
+      const ownersResponse = await fetch(
+        `https://api-zora.reservoir.tools/owners/v2?token=${contract}:${token}&limit=${limit || '100'}`,
         {
           headers: {
             accept: "*/*",
@@ -64,22 +97,24 @@ export default async function handler(
         }
       );
 
-      if (response.ok) {
-        const data = await response.json();
-        const owners = await Promise.all(
-          data.owners.map(async (owner: { address: string; ownership: { tokenCount: any; }; }) => {
-            const { ensName, avatarUrl } = await fetchEnsData(owner.address);
-            return {
-              address: owner.address,
-              tokenCount: owner.ownership.tokenCount,
-              ensName,
-              avatarUrl,
-            };
-          })
-        );
-        res.status(200).json({ owners });
+      const metadata = await fetchMetadata(contract as string);
+
+      if (ownersResponse.ok) {
+        const ownersData = await ownersResponse.json();
+        const ownersPromiseArray = ownersData.owners.map(async (owner: { address: string; ownership: { tokenCount: any; }; }) => {
+          const { ensName, avatarUrl } = await fetchEnsData(owner.address);
+          return {
+            address: owner.address,
+            tokenCount: owner.ownership.tokenCount,
+            ensName,
+            avatarUrl,
+          };
+        });
+
+        const owners = await Promise.all(ownersPromiseArray);
+        res.status(200).json({ owners, metadata });
       } else {
-        res.status(response.status).json({ owners: [] });
+        res.status(ownersResponse.status).json({ owners: [] });
       }
     } catch (error) {
       console.error("Error fetching owners:", error);

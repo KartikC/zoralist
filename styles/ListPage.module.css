@@ -1,11 +1,12 @@
-/* styles/ListPage.module.css */
+/* Container for the entire list and metadata. */
 .ownerListContainer {
     max-width: 500px;
     margin: 0 auto;
-    padding: 20px; /* Adjusted padding */
-    background-color: #000; /* Assuming you want a black background like in the screenshot */
+    padding: 20px;
+    background-color: #000; /* Check if this is needed for each ownerItem as well. */
   }
   
+  /* Each owner item in the list. */
   .ownerItem {
     display: flex;
     align-items: center;
@@ -13,32 +14,35 @@
     padding: 10px;
     background-color: #FFF;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adding subtle shadow for depth */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
+  /* Container for the avatar or identicon. */
   .ownerAvatarContainer {
-    flex-shrink: 0; /* Prevents the avatar from shrinking */
-    width: 40px; /* Fixed width */
-    height: 40px; /* Fixed height */
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px; /* If avatars are always square, this is fine. */
     margin-right: 15px;
     border-radius: 50%;
-    overflow: hidden; /* Ensures the identicon is contained within the border radius */
-    background: #ccc; /* Placeholder background */
+    overflow: hidden;
+    background: #ccc; /* Ensure this shows only when there's no avatar/identicon. */
   }
   
+  /* Style for the actual avatar image. */
   .ownerAvatar {
     width: 100%;
-    height: auto;
+    display: block; /* Ensures the image doesn't have extra space below it. */
   }
   
+  /* Information about the owner, such as name and token count. */
   .ownerInfo {
-    flex-grow: 1; /* Allows the info section to fill the remaining space */
+    flex-grow: 1;
   }
   
   .ownerName {
     font-weight: bold;
-    margin-bottom: 4px; /* Space between name and token count */
-    color: #333; /* Dark text color for readability */
+    margin-bottom: 4px;
+    color: #333;
   }
   
   .ownerTokens {
@@ -46,3 +50,39 @@
     color: #555;
   }
   
+  /* Metadata at the top of the page for the collection. */
+  .collectionMetadata {
+    padding: 20px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  /* Image that represents the collection metadata. */
+  .metadataImage {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 8px;
+  }
+  
+  /* Name of the collection. */
+  .metadataName {
+    margin-top: 10px;
+    font-size: 1.5em;
+  }
+  
+  /* Description of the collection. */
+  .metadataDescription {
+    font-size: 1em;
+    color: #666;
+    margin-top: 5px;
+  }
+  
+  /* Header above the list of owners. */
+  .topOwnersHeader {
+    font-size: 1.2em;
+    margin: 20px 0;
+    padding: 0 20px
+  }
