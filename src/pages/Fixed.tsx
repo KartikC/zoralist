@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as jdenticon from 'jdenticon';
-import styles from '../../styles/ListPage.module.css'; // Import the CSS module
+import styles from '../styles/ListPage.module.css'; // Import the CSS module
 
 //this is fixed to https://zora.co/collect/zora:0x72d07beebb80f084329da88063f5e52f70f020a3/1 and is no longer updates. Use the dynamic route instead.
 

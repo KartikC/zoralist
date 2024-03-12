@@ -1,0 +1,121 @@
+/* ListPage.module.css */
+
+.container {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: var(--color-bg);
+  font-family: 'Libre Baskerville', serif;
+}
+
+.collectionMetadata {
+  padding: 20px;
+  background-color: var(--color-bg-light);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  transition: var(--transition-bg);
+}
+
+.collectionMetadata:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.metadataImage {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.metadataName {
+  font-size: 1.5em;
+  color: var(--color-text);
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.metadataDescription {
+  font-size: 1em;
+  color: var(--color-text-secondary);
+  margin-bottom: 20px;
+}
+
+.topOwnersHeader {
+  text-align: center;
+  font-size: 1.5em;
+  color: var(--color-text);
+  margin-bottom: 20px;
+  background-color: var(--color-bg);
+  padding: 0 20px;
+}
+
+.ownerListContainer {
+  padding: 0;
+}
+
+.ownerItem {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg-light);
+  margin-bottom: 10px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  transition: var(--transition-bg);
+}
+
+.ownerItem:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.ownerLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.ownerAvatarContainer {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+  border-radius: 50%;
+}
+
+.ownerAvatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.ownerInfo {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.ownerName {
+  text-shadow: var(--shadow);
+  font-size: 1.0em;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: var(--color-text);
+}
+
+.ownerTokens {
+  text-shadow: var(--shadow);
+  font-size: 1.0em;
+  color: var(--color-text-secondary);
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--color-bg);
+}
+
+.loadingGif {
+  width: 100px;
+  height: auto;
+}

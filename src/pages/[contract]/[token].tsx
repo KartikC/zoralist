@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import * as jdenticon from 'jdenticon';
-import styles from '../../../styles/ListPage.module.css';
+import styles from '../../styles/ListPage.module.css';
 
 interface Owner {
   address: string;
@@ -16,24 +16,10 @@ interface Metadata {
   image: string;
 }
 
-function useLoadingDots(interval: number = 300, dotCount: number = 3) {
-    const [dots, setDots] = useState('.');
-  
-    useEffect(() => {
-      const timer = setInterval(() => {
-        setDots((prevDots) => (prevDots.length >= dotCount ? '.' : prevDots + '.'));
-      }, interval);
-  
-      return () => clearInterval(timer);
-    }, [interval, dotCount]);
-  
-    return dots;
-  }
-
 const ListPage = () => {
   const [owners, setOwners] = useState<Owner[]>([]);
   const [metadata, setMetadata] = useState<Metadata | null>(null);
-  const [loading, setLoading] = useState(true); // New state for loading
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { contract, token } = router.query;
 
@@ -66,10 +52,12 @@ const ListPage = () => {
   const metadataUrl = metadata ? `https://zora.co/collect/zora:${contract}/${token}` : '#';
 
 
-  const loadingDots = useLoadingDots();
-
   if (loading) {
-    return <div className={styles.loading}>{loadingDots}</div>;
+    return (
+      <div className={styles.loadingContainer}>
+        <img src="../../../zoad.gif" alt="Loading" className={styles.loadingGif} />
+      </div>
+    );
   }
 
   return (

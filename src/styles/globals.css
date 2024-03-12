@@ -9,6 +9,14 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 
+  --color-bg: #000000;
+  --color-bg-light: #242424;
+  --color-bg-hover: #323232;
+  --color-text: #fff;
+  --color-text-secondary: #ccc;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --transition-bg: background-color 0.3s ease;
+
   --primary-glow: conic-gradient(
     from 180deg at 50% 50%,
     #16abff33 0deg,
