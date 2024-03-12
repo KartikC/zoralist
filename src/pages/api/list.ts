@@ -17,6 +17,7 @@ export type Metadata = {
 
 export type Data = {
   owners: Owner[];
+  metadata?: Metadata; // This property is optional in case metadata fetching fails
 };
 
 async function fetchEnsData(address: string): Promise<{ ensName: string | null; avatarUrl: string | null }> {
@@ -52,7 +53,7 @@ async function fetchMetadata(contractAddress: string): Promise<Metadata | null> 
       {
         headers: {
           'accept': 'application/json',
-          'x-api-key': apiKey,
+          'x-api-key': apiKey as string, // TypeScript type assertion
         },
       }
     );
@@ -86,13 +87,13 @@ export default async function handler(
     }
 
     try {
-      const apiKey = process.env.RESERVOIR_API_KEY;
+      const apiKey = process.env.RESERVOIR_API_KEY || ''; // Fallback to an empty string if undefined
       const ownersResponse = await fetch(
         `https://api-zora.reservoir.tools/owners/v2?token=${contract}:${token}&limit=${limit || '100'}`,
         {
           headers: {
-            accept: "*/*",
-            "x-api-key": apiKey,
+            'accept': 'application/json',
+            'x-api-key': apiKey as string, // TypeScript type assertion
           },
         }
       );
