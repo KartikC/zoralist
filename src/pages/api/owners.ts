@@ -22,7 +22,6 @@ export default async function handler(
       res.status(400).json({ owners: [] });
       return;
     }
-
     try {
       const apiKey = process.env.RESERVOIR_API_KEY;
       const response = await fetch(
