@@ -2,7 +2,7 @@
     max-width: 500px;
     margin: 20px auto;
     padding: 10px;
-    background-color: #121212; /* Dark background for the entire container */
+    background-color: #000000; /* Dark background for the entire container */
     font-family: 'Libre Baskerville', serif;
   }
   
@@ -45,7 +45,7 @@
     font-size: 1.5em;
     color: #fff; /* Ensure the text is visible on a dark background */
     margin-bottom: 20px; /* Add bottom margin */
-    background-color: #121212; /* Background color matches the container */
+    background-color: #000000; /* Background color matches the container */
     padding: 0 20px; /* Padding to align with other content */
   }
   
