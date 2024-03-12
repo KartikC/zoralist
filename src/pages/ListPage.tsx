@@ -42,7 +42,7 @@ const ListPage = () => {
   };
 
   return (
-    <>
+    <div className={styles.container}>
       {metadata && (
         <div className={styles.collectionMetadata}>
           <img src={metadata.image} alt={metadata.name} className={styles.metadataImage} />
@@ -53,19 +53,28 @@ const ListPage = () => {
       <h2 className={styles.topOwnersHeader}>Top 100 Owners</h2>
       <div className={styles.ownerListContainer}>
         {owners.map((owner, index) => (
-           <div key={index} className={styles.ownerItem}>
-           <div className={styles.ownerAvatarContainer}>
-             {getAvatar(owner)}
-           </div>
-           <div className={styles.ownerInfo}>
-             <div className={styles.ownerName}>{owner.ensName || truncateAddress(owner.address)}</div>
-             <div className={styles.ownerTokens}>{owner.tokenCount} tokens</div>
-           </div>
-         </div>
+            <a
+            key={index}
+            href={`https://zora.co/${owner.address}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.ownerLink}
+            >
+            <div key={index} className={styles.ownerItem}>
+                <div className={styles.ownerAvatarContainer}>
+                {getAvatar(owner)}
+                </div>
+                <div className={styles.ownerInfo}>
+                <div className={styles.ownerName}>{owner.ensName || truncateAddress(owner.address)}</div>
+                <div className={styles.ownerTokens}>{owner.tokenCount} tokens</div>
+                </div>
+            </div>
+            </a>
         ))}
       </div>
-    </>
+    </div>
   );
+  
 };
 
 

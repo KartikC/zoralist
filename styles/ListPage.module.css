@@ -1,88 +1,107 @@
-/* Container for the entire list and metadata. */
-.ownerListContainer {
+.container {
     max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #000; /* Check if this is needed for each ownerItem as well. */
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #121212; /* Dark background for the entire container */
   }
   
-  /* Each owner item in the list. */
+  .collectionMetadata {
+    padding: 20px;
+    background-color: #242424; /* Similar to the owner item backgrounds */
+    border-radius: 8px; /* Rounded corners for the container */
+    margin-bottom: 20px; /* Space before the list starts */
+    transition: background-color 0.3s ease; /* For hover effect later if needed */
+  }
+  
+  .metadataImage {
+    width: 100%; /* Full width */
+    border-radius: 8px; /* Keep the rounding consistent */
+    margin-bottom: 10px; /* Space between image and text */
+  }
+  
+  .metadataContent {
+    padding: 0 20px; /* Padding to align text with avatars */
+  }
+  
+  .metadataName {
+    font-size: 1.5em;
+    color: #fff; /* Light text for contrast */
+    margin-bottom: 5px; /* Reduced space between title and description */
+  }
+  
+  .metadataDescription {
+    font-size: 1em;
+    color: #ccc; /* Slightly lighter text for contrast */
+    margin-bottom: 20px; /* Space after description */
+  }
+  
+  .topOwnersHeader {
+    text-align: center; /* Center the header text */
+    font-size: 1.5em;
+    color: #fff; /* Ensure the text is visible on a dark background */
+    margin-bottom: 20px; /* Add bottom margin */
+    background-color: #121212; /* Background color matches the container */
+    padding: 0 20px; /* Padding to align with other content */
+  }
+  
+  .ownerListContainer {
+    padding: 0; /* Remove padding to align items with the content above */
+  }
+  
   .ownerItem {
     display: flex;
     align-items: center;
+    background-color: #242424; /* Darker background for each item */
     margin-bottom: 10px;
-    padding: 10px;
-    background-color: #FFF;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px; /* Increased padding for more space */
+    border-radius: 8px; /* Rounded corners for each owner item */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Adjusted for a slightly deeper shadow */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  }
+
+  .ownerItem:hover {
+    background-color: #323232; /* Slightly lighter on hover to indicate interactivity */
+  }
+
+  .ownerLink {
+    text-decoration: none; /* Remove underline from links */
+    color: inherit; /* The link text color will be the same as its container */
+    display: block; /* Make the link block-level to contain the flex items */
   }
   
-  /* Container for the avatar or identicon. */
   .ownerAvatarContainer {
     flex-shrink: 0;
     width: 40px;
-    height: 40px; /* If avatars are always square, this is fine. */
+    height: 40px;
     margin-right: 15px;
-    border-radius: 50%;
-    overflow: hidden;
-    background: #ccc; /* Ensure this shows only when there's no avatar/identicon. */
+    border-radius: 50%; /* Make the container fully rounded */
   }
   
-  /* Style for the actual avatar image. */
   .ownerAvatar {
     width: 100%;
-    display: block; /* Ensures the image doesn't have extra space below it. */
+    height: 100%; /* Set the height to match the width for a perfect circle */
+    object-fit: cover; /* Cover ensures the image covers the area without stretching */
+    border-radius: 50%; /* Fully round the avatar images */
   }
   
-  /* Information about the owner, such as name and token count. */
   .ownerInfo {
     flex-grow: 1;
+    text-align: left; /* Left-align the text within the info section */
   }
+
+  .ownerName,
+  .ownerTokens {
+  text-shadow: 1px 1px 2px black; /* Text shadow for legibility on diverse backgrounds */
+  font-size: 1.0em; /* Slightly larger font size for the name */
+}
   
   .ownerName {
     font-weight: bold;
-    margin-bottom: 4px;
-    color: #333;
+    margin-bottom: 5px; /* Space between name and token count */
+    color: #fff; /* Light text for contrast */
   }
   
   .ownerTokens {
-    font-size: 0.9em;
-    color: #555;
+    color: #ccc; /* Slightly lighter text for contrast */
   }
   
-  /* Metadata at the top of the page for the collection. */
-  .collectionMetadata {
-    padding: 20px;
-    text-align: center;
-    background-color: #fff;
-    border-radius: 8px;
-    margin-bottom: 20px;
-  }
-  
-  /* Image that represents the collection metadata. */
-  .metadataImage {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    border-radius: 8px;
-  }
-  
-  /* Name of the collection. */
-  .metadataName {
-    margin-top: 10px;
-    font-size: 1.5em;
-  }
-  
-  /* Description of the collection. */
-  .metadataDescription {
-    font-size: 1em;
-    color: #666;
-    margin-top: 5px;
-  }
-  
-  /* Header above the list of owners. */
-  .topOwnersHeader {
-    font-size: 1.2em;
-    margin: 20px 0;
-    padding: 0 20px
-  }
