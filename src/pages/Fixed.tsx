@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import * as jdenticon from 'jdenticon';
 import styles from '../../styles/ListPage.module.css'; // Import the CSS module
 
+//this is fixed to https://zora.co/collect/zora:0x72d07beebb80f084329da88063f5e52f70f020a3/1 and is no longer updates. Use the dynamic route instead.
+
 // Define the shape of the data you expect
 interface Owner {
   address: string;
@@ -16,7 +18,7 @@ interface Metadata {
     image: string;
   }
 
-const ListPage = () => {
+const Fixed = () => {
   const [owners, setOwners] = useState<Owner[]>([]);
   const [metadata, setMetadata] = useState<Metadata | null>(null);
 
@@ -84,4 +86,4 @@ function truncateAddress(address: string): string {
   return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
 }
 
-export default ListPage;
+export default Fixed;

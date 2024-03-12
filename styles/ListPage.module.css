@@ -12,6 +12,10 @@
     margin-bottom: 20px; /* Space before the list starts */
     transition: background-color 0.3s ease; /* For hover effect later if needed */
   }
+
+  .collectionMetadata:hover {
+    background-color: #323232; /* Slightly lighter on hover to indicate interactivity */
+  }
   
   .metadataImage {
     width: 100%; /* Full width */
@@ -102,6 +106,7 @@
   }
   
   .ownerTokens {
+    font-size: 1.0em;
     color: #ccc; /* Slightly lighter text for contrast */
   }
   
