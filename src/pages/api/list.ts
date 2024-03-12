@@ -44,12 +44,12 @@ async function fetchEnsData(address: string): Promise<{ ensName: string | null; 
         return { ensName, avatarUrl: null };
       }
       // If the response was not OK, wait before retrying
-      await delay(1000 * attempt); 
+      await delay(800 * attempt); 
     } catch (error) {
       console.error(`Attempt ${attempt} - Error fetching ENS data for ${address}:`, error);
       if (attempt < maxRetries) {
         // Wait before retrying
-        await delay(1000 * attempt);
+        await delay(800 * attempt);
       }
     }
   }
