@@ -78,50 +78,53 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  if (req.method === "GET") {
-    const { contract, token, limit } = req.query;
+  if (req.method !== "GET") {
+    res.status(405).json({ owners: [] });
+    return;
+  }
 
-    if (!contract) {
-      res.status(400).json({ owners: [] });
+  const { contract, token, limit } = req.query;
+
+  if (!contract) {
+    res.status(400).json({ owners: [] });
+    return;
+  }
+
+  try {
+    const apiKey = process.env.RESERVOIR_API_KEY || '';
+    const [ownersResponse, metadataResponse] = await Promise.all([
+      fetch(
+        `https://api-zora.reservoir.tools/owners/v2?token=${contract}:${token}&limit=${limit || '100'}`,
+        { headers: { 'accept': 'application/json', 'x-api-key': apiKey }}
+      ),
+      fetchMetadata(contract as string)
+    ]);
+
+    if (!ownersResponse.ok) {
+      res.status(ownersResponse.status).json({ owners: [] });
       return;
     }
 
-    try {
-      const apiKey = process.env.RESERVOIR_API_KEY || ''; // Fallback to an empty string if undefined
-      const ownersResponse = await fetch(
-        `https://api-zora.reservoir.tools/owners/v2?token=${contract}:${token}&limit=${limit || '100'}`,
-        {
-          headers: {
-            'accept': 'application/json',
-            'x-api-key': apiKey as string, // TypeScript type assertion
-          },
-        }
-      );
+    const ownersData = await ownersResponse.json();
+    const ownersWithEns = await Promise.all(
+      ownersData.owners.map(async (owner: { address: string; ownership: { tokenCount: any; }; }) => {
+        const { ensName, avatarUrl } = await fetchEnsData(owner.address);
+        return {
+          address: owner.address,
+          tokenCount: owner.ownership.tokenCount,
+          ensName,
+          avatarUrl,
+        };
+      })
+    );
 
-      const metadata = await fetchMetadata(contract as string);
-
-      if (ownersResponse.ok) {
-        const ownersData = await ownersResponse.json();
-        const ownersPromiseArray = ownersData.owners.map(async (owner: { address: string; ownership: { tokenCount: any; }; }) => {
-          const { ensName, avatarUrl } = await fetchEnsData(owner.address);
-          return {
-            address: owner.address,
-            tokenCount: owner.ownership.tokenCount,
-            ensName,
-            avatarUrl,
-          };
-        });
-
-        const owners = await Promise.all(ownersPromiseArray);
-        res.status(200).json({ owners, metadata: metadata || undefined });
-      } else {
-        res.status(ownersResponse.status).json({ owners: [] });
-      }
-    } catch (error) {
-      console.error("Error fetching owners:", error);
-      res.status(500).json({ owners: [] });
+    if (metadataResponse !== null) {
+      res.status(200).json({ owners: ownersWithEns, metadata: metadataResponse });
+    } else {
+      res.status(200).json({ owners: ownersWithEns });
     }
-  } else {
-    res.status(405).json({ owners: [] });
+  } catch (error) {
+    console.error("Error fetching owners or metadata:", error);
+    res.status(500).json({ owners: [] });
   }
 }
