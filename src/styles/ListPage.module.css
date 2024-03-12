@@ -27,14 +27,14 @@
 }
 
 .metadataName {
-  font-size: 1.5em;
+  font-size: 1.1em;
   color: var(--color-text);
   font-weight: bold;
   margin-bottom: 5px;
 }
 
 .metadataDescription {
-  font-size: 1em;
+  font-size: 0.8em;
   color: var(--color-text-secondary);
   margin-bottom: 20px;
 }
