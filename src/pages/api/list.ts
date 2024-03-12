@@ -113,7 +113,7 @@ export default async function handler(
         });
 
         const owners = await Promise.all(ownersPromiseArray);
-        res.status(200).json({ owners, metadata });
+        res.status(200).json({ owners, metadata: metadata || undefined });
       } else {
         res.status(ownersResponse.status).json({ owners: [] });
       }
