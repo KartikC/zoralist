@@ -19,19 +19,23 @@ interface Metadata {
 const ListPage = () => {
   const [owners, setOwners] = useState<Owner[]>([]);
   const [metadata, setMetadata] = useState<Metadata | null>(null);
+  const [loading, setLoading] = useState(true); // New state for loading
   const router = useRouter();
   const { contract, token } = router.query;
 
   useEffect(() => {
-    if (contract && token) {
+    if (typeof contract === 'string' && typeof token === 'string') {
+      setLoading(true); // Start loading
       fetch(`/api/list?contract=${contract}&token=${token}&limit=100`)
         .then(response => response.json())
         .then(data => {
           setOwners(data.owners);
           setMetadata(data.metadata);
-        });
+          setLoading(false); // End loading after data is fetched
+        })
+        .catch(() => setLoading(false)); // End loading even if there is an error
     }
-  }, [contract, token]); // Dependency array includes contract and token to refetch when they change
+  }, [contract, token]);
 
  
   const getAvatar = (owner: Owner) => {
@@ -46,6 +50,11 @@ const ListPage = () => {
 
   // Define the URL for the metadata section link dynamically
   const metadataUrl = metadata ? `https://zora.co/collect/zora:${contract}/${token}` : '#';
+
+
+  if (loading) {
+    return <div className={styles.loading}>Loading...</div>; // Simple loading text, can be replaced with a spinner
+  }
 
   return (
     <div className={styles.container}>
@@ -89,9 +98,6 @@ const ListPage = () => {
   );
   
 };
-
-
-
 
 function truncateAddress(address: string): string {
   return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
