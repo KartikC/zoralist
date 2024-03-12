@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import * as jdenticon from 'jdenticon';
 import styles from '../../styles/ListPage.module.css';
+import Image from 'next/image';
+import React from 'react';
 
 interface Owner {
   address: string;
@@ -15,6 +17,23 @@ interface Metadata {
   description: string;
   image: string;
 }
+
+function AvatarComponent({ owner }: { owner: Owner }) {
+  if (owner.avatarUrl) {
+    return <img src={owner.avatarUrl} alt="Avatar" className={styles.ownerAvatar} />;
+  } else {
+    const identiconSvg = jdenticon.toSvg(owner.address, 40);
+    return (
+      <img 
+        src={`data:image/svg+xml;utf8,${encodeURIComponent(identiconSvg)}`} 
+        alt="Identicon" 
+        className={styles.ownerAvatar} 
+      />
+    );
+  }
+}
+
+const Avatar = React.memo(AvatarComponent);
 
 const ListPage = () => {
   const [owners, setOwners] = useState<Owner[]>([]);
@@ -37,17 +56,6 @@ const ListPage = () => {
     }
   }, [contract, token]);
 
- 
-  const getAvatar = (owner: Owner) => {
-    if (owner.avatarUrl) {
-      return <img src={owner.avatarUrl} alt="Avatar" className={styles.ownerAvatar} />;
-    } else {
-      // Create a data URI for an SVG identicon
-      const identiconSvg = jdenticon.toSvg(owner.address, 40);
-      return <img src={`data:image/svg+xml;utf8,${encodeURIComponent(identiconSvg)}`} alt="Identicon" className={styles.ownerAvatar} />;
-    }
-  };
-
   // Define the URL for the metadata section link dynamically
   const metadataUrl = metadata ? `https://zora.co/collect/zora:${contract}/${token}` : '#';
 
@@ -55,7 +63,7 @@ const ListPage = () => {
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
-        <img src="../../../zoad.gif" alt="Loading" className={styles.loadingGif} />
+        <Image src="/zoad.gif" alt="Loading" className={styles.loadingGif} width={500} height={500} />
       </div>
     );
   }
@@ -70,7 +78,7 @@ const ListPage = () => {
                 className={styles.ownerLink}
               >
         <div className={styles.collectionMetadata}>
-          <img src={metadata.image} alt={metadata.name} className={styles.metadataImage} />
+          <Image src={metadata.image} alt={metadata.name} className={styles.metadataImage} width={500} height={300} />
           <h1 className={styles.metadataName}>{metadata.name}</h1>
           <p className={styles.metadataDescription}>{metadata.description}</p>
         </div>
@@ -88,7 +96,7 @@ const ListPage = () => {
             >
             <div key={index} className={styles.ownerItem}>
                 <div className={styles.ownerAvatarContainer}>
-                {getAvatar(owner)}
+                <Avatar owner={owner} />
                 </div>
                 <div className={styles.ownerInfo}>
                 <div className={styles.ownerName}>{owner.ensName || truncateAddress(owner.address)}</div>
