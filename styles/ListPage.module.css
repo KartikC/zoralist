@@ -3,6 +3,7 @@
     margin: 20px auto;
     padding: 10px;
     background-color: #121212; /* Dark background for the entire container */
+    font-family: 'Libre Baskerville', serif;
   }
   
   .collectionMetadata {
